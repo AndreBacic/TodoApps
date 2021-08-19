@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,6 +25,21 @@ namespace TodoMVCAppAsFastAsICan
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication("Auth").AddCookie("Auth", cookieConfig =>
+            {
+                cookieConfig.LoginPath = "/Account/Login";
+                cookieConfig.Cookie.Name = "Auth.cookie";
+                cookieConfig.AccessDeniedPath = "/Account/Login";
+            });
+
+            services.AddAuthorization(authConfig =>
+            {
+                authConfig.AddPolicy("Has Email Policy", policyBuilder =>
+                {
+                    policyBuilder.RequireClaim(ClaimTypes.Email);
+                });
+            });
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 
@@ -48,6 +64,7 @@ namespace TodoMVCAppAsFastAsICan
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

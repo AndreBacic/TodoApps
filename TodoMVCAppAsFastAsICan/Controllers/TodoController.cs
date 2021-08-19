@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TodoMVCAppAsFastAsICan.Data;
@@ -10,6 +11,7 @@ using TodoMVCAppAsFastAsICan.Models;
 
 namespace TodoMVCAppAsFastAsICan.Controllers
 {
+    [Authorize]
     public class TodoController : Controller
     {
         private readonly ILogger<TodoController> _logger;
