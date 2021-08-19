@@ -1,0 +1,13 @@
+﻿@{
+    var controllerName = ViewContext.RouteData.Values["controller"].ToString();    
+
+    if (controllerName == "Account")
+    {
+        Layout = "_AccountLayout";
+    }
+    else
+    {
+        Layout = "_TodoLayout";
+    }
+
+}
