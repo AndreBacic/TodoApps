@@ -13,10 +13,17 @@ namespace TodoMVCAppAsFastAsICan.Data
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Name
+        {
+            get
+            {
+                return this.FirstName + " " + this.LastName;
+            }
+        }
         public string EmailAddress { get; set; }
         public string PhoneNumber { get; set; }
 
-        [BsonElement("EncryptedPassword")]
+        [BsonElement("PasswordHash")]
         public string PasswordHash { get; set; }
         public List<TodoModel> Todos { get; set; }
     }

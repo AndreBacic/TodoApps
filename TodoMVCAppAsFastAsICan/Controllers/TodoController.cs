@@ -11,7 +11,7 @@ using TodoMVCAppAsFastAsICan.Models;
 
 namespace TodoMVCAppAsFastAsICan.Controllers
 {
-    [Authorize]
+    [Authorize("Auth_Policy")]
     public class TodoController : Controller
     {
         private readonly ILogger<TodoController> _logger;
@@ -24,6 +24,12 @@ namespace TodoMVCAppAsFastAsICan.Controllers
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Index([FromBody]TodoModel newTodo)
         {
             return View();
         }

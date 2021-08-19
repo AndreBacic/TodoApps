@@ -1,9 +1,23 @@
-﻿
-@{
-    ViewData["Title"] = "_AccountLayout";
-}
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Todos</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <div class="container">
+        <main role="main" class="account-main">
+            @RenderBody()
+        </main>
+    </div>
 
-<main>
-    @RenderBody()
-</main>
+    <footer class="footer">
+        <div class="container">
+            &copy; 2021 - Todo MVC App In < 8 Hours
+        </div>
+    </footer>
+</body>
+</html>
 

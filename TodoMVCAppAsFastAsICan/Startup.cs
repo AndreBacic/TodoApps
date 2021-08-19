@@ -34,9 +34,10 @@ namespace TodoMVCAppAsFastAsICan
 
             services.AddAuthorization(authConfig =>
             {
-                authConfig.AddPolicy("Has Email Policy", policyBuilder =>
+                authConfig.AddPolicy("Auth_Policy", policyBuilder =>
                 {
                     policyBuilder.RequireClaim(ClaimTypes.Email);
+                    policyBuilder.RequireClaim(ClaimTypes.Name)
                 });
             });
 
@@ -71,7 +72,7 @@ namespace TodoMVCAppAsFastAsICan
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Todo}/{action=Index}/{id?}");
             });
         }
     }

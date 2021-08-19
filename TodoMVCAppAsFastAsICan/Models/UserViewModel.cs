@@ -11,6 +11,13 @@ namespace TodoMVCAppAsFastAsICan.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Name
+        {
+            get
+            {
+                return this.FirstName + " " + this.LastName;
+            }
+        }
         public string EmailAddress { get; set; }
         public string PhoneNumber { get; set; }
 

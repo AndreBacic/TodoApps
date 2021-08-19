@@ -43,20 +43,20 @@ namespace TodoMVCAppAsFastAsICan.Data
 
         //####################################### BASIC MONGOBD METHODS ##########################################
 
-        public void InsertRecord<T>(string table, T record)
+        public void InsertRecord<T>(T record, string table = UserCollection)
         {
             var collection = db.GetCollection<T>(table);
             collection.InsertOne(record);
         }
 
-        public List<T> LoadRecords<T>(string table)
+        public List<T> LoadRecords<T>(string table = UserCollection)
         {
             var collection = db.GetCollection<T>(table);
 
             return collection.Find(new BsonDocument()).ToList();
         }
 
-        public T LoadRecordById<T>(string table, Guid id)
+        public T LoadRecordById<T>(Guid id, string table = UserCollection)
         {
             var collection = db.GetCollection<T>(table);
             var filter = Builders<T>.Filter.Eq(ModelIdName, id); // Eq id for equals, ctrl+J to see other comparisons
@@ -64,7 +64,7 @@ namespace TodoMVCAppAsFastAsICan.Data
             return collection.Find(filter).First();
         }
 
-        public void UpsertRecord<T>(string table, Guid id, T record)
+        public void UpsertRecord<T>(Guid id, T record, string table = UserCollection)
         {
             var collection = db.GetCollection<T>(table);
 
@@ -74,7 +74,7 @@ namespace TodoMVCAppAsFastAsICan.Data
                 new ReplaceOptions { IsUpsert = true });
         }
 
-        public void DeleteRecord<T>(string table, Guid id)
+        public void DeleteRecord<T>(Guid id, string table = UserCollection)
         {
             var collection = db.GetCollection<T>(table);
             var filter = Builders<T>.Filter.Eq(ModelIdName, id); // Eq id for equals, ctrl+J to see other comparisons
