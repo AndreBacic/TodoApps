@@ -66,9 +66,11 @@ namespace TodoMVCAppAsFastAsICan.Controllers
                 return View();
             }
         }
+        [Authorize("Auth_Policy")]
         public IActionResult Logout()
         {
-            return View();
+            HttpContext.SignOutAsync();
+            return RedirectToPage("Login");
         }
         public IActionResult Register()
         {
@@ -78,16 +80,26 @@ namespace TodoMVCAppAsFastAsICan.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Register([FromBody]UserViewModel newUser)
         {
-            return View();
+            UserModel newDbUser = new UserModel
+            {
+                FirstName = newUser.FirstName,
+                LastName = newUser.LastName,
+                EmailAddress = newUser.EmailAddress,
+                PasswordHash = HashAndSalter.HashAndSalt(newUser.Password).ToDbString()
+            };
+            _db.InsertRecord(newDbUser);
+            return RedirectToAction("Index", "Todo");
         }
 
         [Authorize("Auth_Policy")]
         public IActionResult EditAccount()
         {
-            return View();
+            string email = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Email).First().Value;
+            var user = _db.LoadRecords<UserModel>().Where(x => x.EmailAddress == email);
+            return View(user);
         }
         [Authorize("Auth_Policy")]
-        [HttpPost]
+        [HttpPut]
         [ValidateAntiForgeryToken]
         public IActionResult EditAccount([FromBody]UserViewModel user)
         {

@@ -37,7 +37,7 @@ namespace TodoMVCAppAsFastAsICan
                 authConfig.AddPolicy("Auth_Policy", policyBuilder =>
                 {
                     policyBuilder.RequireClaim(ClaimTypes.Email);
-                    policyBuilder.RequireClaim(ClaimTypes.Name)
+                    policyBuilder.RequireClaim(ClaimTypes.Name);
                 });
             });
 

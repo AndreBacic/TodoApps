@@ -34,8 +34,12 @@ namespace TodoMVCAppAsFastAsICan.Data
         /// Initialize database using a known connection string.
         /// </summary>
         /// <param name="database"></param>
-        public MongoDbAccessor(string database = TodoDb)
+        public MongoDbAccessor(string database)
         {
+            if (database == null)
+            {
+                database = TodoDb;
+            }
             var client = new MongoClient();
             db = client.GetDatabase(database);
         }

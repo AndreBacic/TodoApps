@@ -4,10 +4,14 @@
 
 html {
     position: relative;
-    min-width: 100%;
-    min-height: 100%;
+    width: 100%;
+    height: 100%;
 }
 body {
+    width: 100%;
+    height: 100%;
+    background-color: hsl(240, 0%, 12%);
+    margin: 0;
     /* Margin bottom by footer height */
     margin-bottom: 60px;
 }
@@ -35,10 +39,16 @@ nav a:hover {
     white-space: nowrap;
     line-height: 60px;
 }
-
+.grid-container {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
 .account-main {
     width: 758px;
-    background-image: linear-gradient(to bottom right, yellow, gold);
+    background-image: linear-gradient(to bottom right, hsl(65, 100%, 50%) 25%, hsl(45, 100%, 45%));
     padding: 40px;
     border-radius: 40px;
 }
