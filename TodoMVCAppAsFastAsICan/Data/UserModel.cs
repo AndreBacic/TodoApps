@@ -24,6 +24,6 @@ namespace TodoMVCAppAsFastAsICan.Data
 
         [BsonElement("PasswordHash")]
         public string PasswordHash { get; set; }
-        public List<TodoModel> Todos { get; set; }
+        public List<TodoModel> Todos { get; set; } = new List<TodoModel>();
     }
 }

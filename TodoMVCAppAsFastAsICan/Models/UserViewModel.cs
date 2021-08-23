@@ -21,6 +21,6 @@ namespace TodoMVCAppAsFastAsICan.Models
         public string EmailAddress { get; set; }
         public string Password { get; set; }
 
-        public List<TodoModel> Todos { get; set; } = null;
+        public List<TodoModel> Todos { get; set; } = new List<TodoModel>();
     }
 }

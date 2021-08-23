@@ -26,8 +26,7 @@ namespace TodoMVCAppAsFastAsICan.Controllers
 
         public IActionResult Index()
         {
-            string email = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Email).First().Value;
-            var user = _db.LoadRecords<UserModel>().Where(x => x.EmailAddress == email).First();
+            var user = getLoggedInUserByEmail();
             if (user.Todos == null)
             {
                 user.Todos = new List<TodoModel>();
@@ -38,7 +37,15 @@ namespace TodoMVCAppAsFastAsICan.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Index(TodoModel newTodo)
         {
-            return View();
+            var user = getLoggedInUserByEmail();
+            if (user.Todos == null)
+            {
+                user.Todos = new List<TodoModel>();
+            }
+            user.Todos.Add(newTodo);
+            _db.UpsertRecord(user.Id, user);
+
+            return View(user);
         }
 
         public IActionResult Privacy()
@@ -50,6 +57,12 @@ namespace TodoMVCAppAsFastAsICan.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private UserModel getLoggedInUserByEmail()
+        {
+            string email = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Email).First().Value;
+            return _db.LoadRecords<UserModel>().Where(x => x.EmailAddress == email).First();
         }
     }
 }
