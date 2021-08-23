@@ -64,12 +64,19 @@ namespace TodoMVCAppAsFastAsICan.Controllers
         }
         public IActionResult Register()
         {
+            ViewData["RegisterMessage"] = "";
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Register(UserViewModel newUser)
         {
+            var allUsers = _db.LoadRecords<UserModel>();
+            if (allUsers.Any(x => x.EmailAddress == newUser.EmailAddress))
+            {
+                ViewData["RegisterMessage"] = "That email address is taken";
+                return View();
+            }
             UserModel newDbUser = new UserModel
             {
                 FirstName = newUser.FirstName,
@@ -103,7 +110,7 @@ namespace TodoMVCAppAsFastAsICan.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EditAccount(UserViewModel user)
         {
-            return View();
+            return View(user);
         }
 
         private async void LogInUser(UserModel user)
