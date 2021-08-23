@@ -1,5 +1,4 @@
-﻿@model TodoMVCAppAsFastAsICan.Models.UserViewModel
-
+﻿@model UserViewModel
 @{
     ViewData["Title"] = "EditAccount";
 }
@@ -13,17 +12,17 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="FirstName" class="control-label"></label>
-            <input asp-for="FirstName" class="form-control" />
+            <input asp-for="FirstName" class="form-control" value="@Model.FirstName" />
             <span asp-validation-for="FirstName" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="LastName" class="control-label"></label>
-            <input asp-for="LastName" class="form-control" />
+            <input asp-for="LastName" class="form-control" value="@Model.LastName" />
             <span asp-validation-for="LastName" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="EmailAddress" class="control-label"></label>
-            <input asp-for="EmailAddress" class="form-control" />
+            <input asp-for="EmailAddress" class="form-control" value="@Model.EmailAddress" />
             <span asp-validation-for="EmailAddress" class="text-danger"></span>
         </div>
         <div class="form-group">

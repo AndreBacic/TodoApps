@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,11 +26,17 @@ namespace TodoMVCAppAsFastAsICan.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            string email = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Email).First().Value;
+            var user = _db.LoadRecords<UserModel>().Where(x => x.EmailAddress == email).First();
+            if (user.Todos == null)
+            {
+                user.Todos = new List<TodoModel>();
+            }
+            return View(user);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index([FromBody]TodoModel newTodo)
+        public IActionResult Index(TodoModel newTodo)
         {
             return View();
         }

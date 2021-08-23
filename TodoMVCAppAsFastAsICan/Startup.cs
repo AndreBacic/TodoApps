@@ -25,10 +25,10 @@ namespace TodoMVCAppAsFastAsICan
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication("Auth").AddCookie("Auth", cookieConfig =>
+            services.AddAuthentication("TodoAuth").AddCookie("TodoAuth", cookieConfig =>
             {
                 cookieConfig.LoginPath = "/Account/Login";
-                cookieConfig.Cookie.Name = "Auth.cookie";
+                cookieConfig.Cookie.Name = "TodoAuth.cookie";
                 cookieConfig.AccessDeniedPath = "/Account/Login";
             });
 

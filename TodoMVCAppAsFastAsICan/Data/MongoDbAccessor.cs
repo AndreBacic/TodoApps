@@ -9,7 +9,7 @@ namespace TodoMVCAppAsFastAsICan.Data
 {
     public class MongoDbAccessor
     {
-        private IMongoDatabase db;
+        private IMongoDatabase _db;
 
         public const string TodoDb = "TodoApp";
         /// <summary>
@@ -27,7 +27,7 @@ namespace TodoMVCAppAsFastAsICan.Data
         {
             var client = new MongoClient();
             string database = configuration.GetConnectionString("MongoDB");
-            db = client.GetDatabase(database);
+            _db = client.GetDatabase(database);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace TodoMVCAppAsFastAsICan.Data
                 database = TodoDb;
             }
             var client = new MongoClient();
-            db = client.GetDatabase(database);
+            _db = client.GetDatabase(database);
         }
 
 
@@ -49,20 +49,20 @@ namespace TodoMVCAppAsFastAsICan.Data
 
         public void InsertRecord<T>(T record, string table = UserCollection)
         {
-            var collection = db.GetCollection<T>(table);
+            var collection = _db.GetCollection<T>(table);
             collection.InsertOne(record);
         }
 
         public List<T> LoadRecords<T>(string table = UserCollection)
         {
-            var collection = db.GetCollection<T>(table);
+            var collection = _db.GetCollection<T>(table);
 
             return collection.Find(new BsonDocument()).ToList();
         }
 
         public T LoadRecordById<T>(Guid id, string table = UserCollection)
         {
-            var collection = db.GetCollection<T>(table);
+            var collection = _db.GetCollection<T>(table);
             var filter = Builders<T>.Filter.Eq(ModelIdName, id); // Eq id for equals, ctrl+J to see other comparisons
 
             return collection.Find(filter).First();
@@ -70,7 +70,7 @@ namespace TodoMVCAppAsFastAsICan.Data
 
         public void UpsertRecord<T>(Guid id, T record, string table = UserCollection)
         {
-            var collection = db.GetCollection<T>(table);
+            var collection = _db.GetCollection<T>(table);
 
             var result = collection.ReplaceOne(
                 new BsonDocument("_id", new BsonBinaryData(id, GuidRepresentation.Standard)), // the BsonBinaryData with GuidRep is the not obsolete way
@@ -80,7 +80,7 @@ namespace TodoMVCAppAsFastAsICan.Data
 
         public void DeleteRecord<T>(Guid id, string table = UserCollection)
         {
-            var collection = db.GetCollection<T>(table);
+            var collection = _db.GetCollection<T>(table);
             var filter = Builders<T>.Filter.Eq(ModelIdName, id); // Eq id for equals, ctrl+J to see other comparisons
             collection.DeleteOne(filter);
         }

@@ -1,12 +1,12 @@
-﻿
+﻿@model LoginModel
 @{
     ViewData["Title"] = "Login";
 }
 
 <h1>Login</h1>
-<form>
-    <input type="email" placeholder="Email Address" />
-    <input type="password" placeholder="Password" />
+<form asp-action="Login" asp-controller="Account" method="post">
+    <input type="email" asp-for="EmailAddress" placeholder="Email Address" />
+    <input type="password" asp-for="Password" placeholder="Password" />
     <input type="submit" value="Log in" />
 </form>
 <div>No account? <a asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a></div>

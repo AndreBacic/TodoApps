@@ -26,7 +26,7 @@ namespace TodoMVCAppAsFastAsICan.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login([FromBody]LoginModel user)
+        public IActionResult Login(LoginModel user)
         {
             try
             {
@@ -40,25 +40,15 @@ namespace TodoMVCAppAsFastAsICan.Controllers
 
                 if (IsPasswordCorrect)
                 {
+                    LogInUser(dbUser);
 
-                    List<Claim> personClaims = new List<Claim>()
-                    {
-                        new Claim(ClaimTypes.Name, dbUser.Name),
-                        new Claim(ClaimTypes.Email, dbUser.EmailAddress)
-                    };
+                    var t = HttpContext.User.Identity.Name;
 
-                    List<ClaimsIdentity> claimsIdentities = new List<ClaimsIdentity>()
-                    {
-                        new ClaimsIdentity(personClaims)
-                    };
-
-                    HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentities));
-
-                    return RedirectToAction(nameof(Login));
+                    return RedirectToAction("Index", "Todo");
                 }
                 else
                 {
-                    throw new FormatException("Incorrect password hash storage format");
+                    return View();
                 }
             }
             catch
@@ -70,7 +60,7 @@ namespace TodoMVCAppAsFastAsICan.Controllers
         public IActionResult Logout()
         {
             HttpContext.SignOutAsync();
-            return RedirectToPage("Login");
+            return RedirectToAction("Login", "Account");
         }
         public IActionResult Register()
         {
@@ -78,7 +68,7 @@ namespace TodoMVCAppAsFastAsICan.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Register([FromBody]UserViewModel newUser)
+        public IActionResult Register(UserViewModel newUser)
         {
             UserModel newDbUser = new UserModel
             {
@@ -88,6 +78,9 @@ namespace TodoMVCAppAsFastAsICan.Controllers
                 PasswordHash = HashAndSalter.HashAndSalt(newUser.Password).ToDbString()
             };
             _db.InsertRecord(newDbUser);
+
+            LogInUser(newDbUser);
+
             return RedirectToAction("Index", "Todo");
         }
 
@@ -95,15 +88,38 @@ namespace TodoMVCAppAsFastAsICan.Controllers
         public IActionResult EditAccount()
         {
             string email = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Email).First().Value;
-            var user = _db.LoadRecords<UserModel>().Where(x => x.EmailAddress == email);
-            return View(user);
+            var user = _db.LoadRecords<UserModel>().Where(x => x.EmailAddress == email).First();
+            var displayUser = new UserViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                EmailAddress = user.EmailAddress,
+                Password = null
+            };
+            return View(displayUser);
         }
         [Authorize("Auth_Policy")]
         [HttpPut]
         [ValidateAntiForgeryToken]
-        public IActionResult EditAccount([FromBody]UserViewModel user)
+        public IActionResult EditAccount(UserViewModel user)
         {
             return View();
+        }
+
+        private async void LogInUser(UserModel user)
+        {
+            List<Claim> personClaims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, user.Name),
+                    new Claim(ClaimTypes.Email, user.EmailAddress)
+                };
+
+            List<ClaimsIdentity> claimsIdentities = new List<ClaimsIdentity>()
+                {
+                    new ClaimsIdentity(personClaims, "TodoAuth.Identity")
+                };
+
+            await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentities));
         }
     }
 }
