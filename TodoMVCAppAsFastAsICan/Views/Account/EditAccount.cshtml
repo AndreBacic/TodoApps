@@ -1,6 +1,6 @@
-﻿@model UserViewModel
+﻿@model EditUserViewModel
 @{
-    ViewData["Title"] = "EditAccount";
+    ViewData["Title"] = "Edit Account";
 }
 
 <h1>Edit Account</h1>
@@ -26,9 +26,15 @@
             <span asp-validation-for="EmailAddress" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Password" class="control-label"></label>
-            <input asp-for="Password" class="form-control" />
-            <span asp-validation-for="Password" class="text-danger"></span>
+            <p>(Only use the fields below if you want to change your password)</p>
+            <label asp-for="OldPassword" class="control-label"></label>
+            <input asp-for="OldPassword" class="form-control" />
+            <span asp-validation-for="OldPassword" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="NewPassword" class="control-label"></label>
+            <input asp-for="NewPassword" class="form-control" />
+            <span asp-validation-for="NewPassword" class="text-danger"></span>
         </div>
         <div class="form-group">
             <input type="submit" value="Save" class="btn btn-primary" />

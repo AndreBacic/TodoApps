@@ -94,23 +94,64 @@ namespace TodoMVCAppAsFastAsICan.Controllers
         [Authorize("Auth_Policy")]
         public IActionResult EditAccount()
         {
-            string email = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Email).First().Value;
-            var user = _db.LoadRecords<UserModel>().Where(x => x.EmailAddress == email).First();
-            var displayUser = new UserViewModel
-            {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                EmailAddress = user.EmailAddress,
-                Password = null
-            };
-            return View(displayUser);
+            var user = GetLoggedInUserByEmail();
+            
+            return View(DbUserToEditView(user));
         }
         [Authorize("Auth_Policy")]
         [HttpPut]
         [ValidateAntiForgeryToken]
-        public IActionResult EditAccount(UserViewModel user)
+        public IActionResult EditAccount(EditUserViewModel updatedUser)
         {
-            return View(user);
+            // 1) Make sure email isn't taken
+            var allUsers = _db.LoadRecords<UserModel>();
+            var loggedInUser = GetLoggedInUserByEmail();
+
+            if (IsValidEmailAddress(updatedUser.EmailAddress) == false || 
+                allUsers.Any(x => x.EmailAddress == updatedUser.EmailAddress))
+            {
+                ViewData["EditMessage"] = "That email address is taken";
+                return View(DbUserToEditView(loggedInUser));
+            }
+                    
+            if (string.IsNullOrWhiteSpace(updatedUser.NewPassword) == false)
+            {
+                // 2) Make sure old password is correct
+                // TODO - add regex to EditUserViewModel
+                PasswordHashModel passwordHash = new PasswordHashModel();
+                passwordHash.FromDbString(loggedInUser.PasswordHash);
+
+                (bool IsPasswordCorrect, _) = HashAndSalter.PasswordEqualsHash(updatedUser.OldPassword, passwordHash);
+
+                if (IsPasswordCorrect)
+                {
+                    loggedInUser.FirstName = updatedUser.FirstName;
+                    loggedInUser.LastName = updatedUser.LastName;
+                    loggedInUser.EmailAddress = updatedUser.EmailAddress;
+                    loggedInUser.PasswordHash = HashAndSalter.HashAndSalt(updatedUser.NewPassword).ToDbString();
+                    _db.UpsertRecord(loggedInUser.Id, loggedInUser);
+
+                    LogInUser(loggedInUser);
+
+                    return View(DbUserToEditView(loggedInUser));
+                } 
+                else
+                {
+                    return View(DbUserToEditView(loggedInUser));
+                }
+            } 
+            else
+            {
+                // No password change
+                loggedInUser.FirstName = updatedUser.FirstName;
+                loggedInUser.LastName = updatedUser.LastName;
+                loggedInUser.EmailAddress = updatedUser.EmailAddress;
+                _db.UpsertRecord(loggedInUser.Id, loggedInUser);
+
+                LogInUser(loggedInUser);
+
+                return View(DbUserToEditView(loggedInUser));
+            }
         }
 
         private async void LogInUser(UserModel user)
@@ -127,6 +168,34 @@ namespace TodoMVCAppAsFastAsICan.Controllers
                 };
 
             await HttpContext.SignInAsync(new ClaimsPrincipal(claimsIdentities));
+        }
+
+        private UserModel GetLoggedInUserByEmail()
+        {
+            string email = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Email).First().Value;
+            return _db.LoadRecords<UserModel>().Where(x => x.EmailAddress == email).First();
+        }
+        private bool IsValidEmailAddress(string emailAddress)
+        {
+            try
+            {
+                System.Net.Mail.MailAddress m = new System.Net.Mail.MailAddress(emailAddress);
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
+        }
+
+        private EditUserViewModel DbUserToEditView(UserModel user)
+        {
+            return new EditUserViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                EmailAddress = user.EmailAddress
+            };
         }
     }
 }
