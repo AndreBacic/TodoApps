@@ -1,8 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+using TodoMVCAppAsFastAsICan.Data;
 
 namespace TodoMVCAppAsFastAsICan.Models
 {
-    public class EditUserViewModel
+    public class RegisterViewModel
     {
         [Required]
         [Display(Name = "First Name")]
@@ -16,10 +22,7 @@ namespace TodoMVCAppAsFastAsICan.Models
         public string EmailAddress { get; set; }
         [Required]
         [DataType(DataType.Password)]
-        public string OldPassword { get; set; }
-        [Required]
-        [DataType(DataType.Password)]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$", ErrorMessage = "Invalid Password")]
-        public string NewPassword { get; set; }
+        public string Password { get; set; }
     }
 }

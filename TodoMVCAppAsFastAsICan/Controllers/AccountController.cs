@@ -56,6 +56,7 @@ namespace TodoMVCAppAsFastAsICan.Controllers
                 return View();
             }
         }
+
         [Authorize("Auth_Policy")]
         public IActionResult Logout()
         {
@@ -67,10 +68,17 @@ namespace TodoMVCAppAsFastAsICan.Controllers
             ViewData["RegisterMessage"] = "";
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Register(UserViewModel newUser)
+        public IActionResult Register(RegisterViewModel newUser)
         {
+            if (ModelState.IsValid == false)
+            {
+                ViewData["RegisterMessage"] = "Invalid Inputs";
+                return View(newUser);
+            }
+
             var allUsers = _db.LoadRecords<UserModel>();
             if (allUsers.Any(x => x.EmailAddress == newUser.EmailAddress))
             {
@@ -99,7 +107,7 @@ namespace TodoMVCAppAsFastAsICan.Controllers
             return View(DbUserToEditView(user));
         }
         [Authorize("Auth_Policy")]
-        [HttpPut]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult EditAccount(EditUserViewModel updatedUser)
         {
@@ -108,7 +116,7 @@ namespace TodoMVCAppAsFastAsICan.Controllers
             var loggedInUser = GetLoggedInUserByEmail();
 
             if (IsValidEmailAddress(updatedUser.EmailAddress) == false || 
-                allUsers.Any(x => x.EmailAddress == updatedUser.EmailAddress))
+                allUsers.Any(x => x.EmailAddress == updatedUser.EmailAddress && updatedUser.EmailAddress != loggedInUser.EmailAddress))
             {
                 ViewData["EditMessage"] = "That email address is taken";
                 return View(DbUserToEditView(loggedInUser));
@@ -133,6 +141,8 @@ namespace TodoMVCAppAsFastAsICan.Controllers
 
                     LogInUser(loggedInUser);
 
+                    loggedInUser.EmailAddress = "";
+                    loggedInUser.PasswordHash = "";
                     return View(DbUserToEditView(loggedInUser));
                 } 
                 else

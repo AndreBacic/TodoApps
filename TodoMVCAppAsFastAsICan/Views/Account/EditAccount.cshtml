@@ -8,7 +8,7 @@
 <h4>@User.Identity.Name</h4>
 <hr />
 <div>
-    <form asp-action="EditAccount" asp-controller="Account" method="put">
+    <form asp-action="EditAccount" asp-controller="Account" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="FirstName" class="control-label"></label>
@@ -22,18 +22,18 @@
         </div>
         <div class="form-group">
             <label asp-for="EmailAddress" class="control-label"></label>
-            <input asp-for="EmailAddress" class="form-control" value="@Model.EmailAddress" />
+            <input asp-for="EmailAddress" type="email" class="form-control" value="@Model.EmailAddress" />
             <span asp-validation-for="EmailAddress" class="text-danger"></span>
         </div>
         <div class="form-group">
             <p>(Only use the fields below if you want to change your password)</p>
             <label asp-for="OldPassword" class="control-label"></label>
-            <input asp-for="OldPassword" class="form-control" />
+            <input asp-for="OldPassword" type="password" class="form-control" />
             <span asp-validation-for="OldPassword" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="NewPassword" class="control-label"></label>
-            <input asp-for="NewPassword" class="form-control" />
+            <input asp-for="NewPassword" type="password" class="form-control" />
             <span asp-validation-for="NewPassword" class="text-danger"></span>
         </div>
         <div class="form-group">
