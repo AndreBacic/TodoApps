@@ -42,6 +42,7 @@ namespace TodoMVCAppAsFastAsICan.Controllers
             if (ModelState.IsValid)
             {
                 newTodo.DateCreated = DateTime.UtcNow;
+                newTodo.LastEdited = DateTime.UtcNow;
 
                 if (user.Todos == null)
                 {
@@ -58,24 +59,33 @@ namespace TodoMVCAppAsFastAsICan.Controllers
         {
             var user = getLoggedInUserByEmail();
 
-            var todo = user.Todos[todoIndex];
+            var dbTodo = user.Todos[todoIndex];
+
+            var todo = new EditTodoModel
+            {
+                Index = todoIndex,
+                Message = dbTodo.Message,
+                DateCreated = dbTodo.DateCreated,
+                LastEdited = dbTodo.LastEdited
+            };
 
             return View(todo);
             
         }
-        [Route("{todoIndex}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int todoIndex, TodoModel todo)
+        public IActionResult Edit(EditTodoModel todo)
         {
             var user = getLoggedInUserByEmail();
 
             if (ModelState.IsValid)
             {
-                todo.LastEdited = DateTime.UtcNow;
-
                 // TODO: Edit inputs validation
-                user.Todos[todoIndex] = todo;
+                user.Todos[todo.Index] = new TodoModel { 
+                    Message = todo.Message,
+                    DateCreated = todo.DateCreated,
+                    LastEdited = DateTime.UtcNow
+                };
 
                 _db.UpsertRecord(user.Id, user); 
             }
@@ -84,6 +94,7 @@ namespace TodoMVCAppAsFastAsICan.Controllers
             
         }
 
+        // todo: maybe make this delete POST and have a get version that has a confirm delete view.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int todoIndex)
@@ -95,7 +106,6 @@ namespace TodoMVCAppAsFastAsICan.Controllers
             _db.UpsertRecord(user.Id, user);
 
             return RedirectToAction(nameof(Index));
-
         }
 
         public IActionResult Privacy()

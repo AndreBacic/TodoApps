@@ -9,7 +9,15 @@
 @await Html.PartialAsync("_CreateTodo.cshtml", new TodoModel())
 <table>
     <thead>
-
+        <tr>
+            @{
+                var _todo = new EditTodoModel();
+            }
+            <td></td>
+            <td>@Html.DisplayNameFor(_ => _todo.Message)</td>
+            <td>@Html.DisplayNameFor(_ => _todo.DateCreated)</td>
+            <td>@Html.DisplayNameFor(_ => _todo.LastEdited)</td>
+        </tr>
     </thead>
     <tbody>
         @foreach (var todo in Model.Todos)
@@ -17,10 +25,11 @@
             <tr>
                 <td>TODO: </td>
                 <td>@todo.Message</td>
-                <td>@todo.DateCreated</td>
+                <td>@Html.DisplayFor(_ => todo.DateCreated)</td>
                 <td>@Html.DisplayFor(_ => todo.LastEdited)</td>
                 <td><a asp-controller="Todo" asp-action="Edit" asp-route-todoIndex="@Model.Todos.IndexOf(todo)">Edit</a></td>
-                <td><a asp-controller="Todo" asp-action="Delete" asp-route-todoIndex="@Model.Todos.IndexOf(todo)">Delete</a></td>
+                <td><form asp-controller="Todo" asp-action="Delete" asp-route-todoIndex="@Model.Todos.IndexOf(todo)" method="post">
+                    <input type="submit" value="Delete" /></form></td>
             </tr>
         }
     </tbody>

@@ -1,18 +1,20 @@
-﻿@model TodoMVCAppAsFastAsICan.Data.TodoModel
+﻿@model EditTodoModel
 
-<h4>TodoModel</h4>
+<h4>Edit Todo</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Index" />
+            <input type="hidden" asp-for="DateCreated" />
             <div class="form-group">
-                <label asp-for="Message" class="control-label"></label>
-                <input asp-for="Message" class="form-control" />
+                <label asp-for="Message" class="control-label">:</label>
+                <input asp-for="Message" class="form-control" value="@Model.Message" />
                 <span asp-validation-for="Message" class="text-danger"></span>
             </div>
-            <p>@Html.DisplayNameFor(_ => Model.DateCreated): @Html.DisplayFor(_ => Model.DateCreated)</p>
-            <p>@Html.DisplayNameFor(_ => Model.LastEdited): @Html.DisplayFor(_ => Model.LastEdited)</p>
+            <p>@Html.DisplayNameFor(m => m.DateCreated): @Html.DisplayFor(m => m.DateCreated)</p>
+            <p>@Html.DisplayNameFor(m => m.LastEdited): @Html.DisplayFor(m => m.LastEdited)</p>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -21,6 +23,6 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Back to Home</a>
 </div>
 
