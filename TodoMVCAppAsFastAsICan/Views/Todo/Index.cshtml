@@ -7,10 +7,21 @@
     <h2>@User.Identity.Name</h2>
 </div>
 @await Html.PartialAsync("_CreateTodo.cshtml", new TodoModel())
+<table>
+    <thead>
 
-@foreach (var todo in Model.Todos)
-{
-    <div>
-        <p>@todo.Message</p>
-    </div>
-}
+    </thead>
+    <tbody>
+        @foreach (var todo in Model.Todos)
+        {
+            <tr>
+                <td>TODO: </td>
+                <td>@todo.Message</td>
+                <td>@todo.DateCreated</td>
+                <td>@Html.DisplayFor(_ => todo.LastEdited)</td>
+                <td><a asp-controller="Todo" asp-action="Edit" asp-route-todoIndex="@Model.Todos.IndexOf(todo)">Edit</a></td>
+                <td><a asp-controller="Todo" asp-action="Delete" asp-route-todoIndex="@Model.Todos.IndexOf(todo)">Delete</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -38,14 +38,64 @@ namespace TodoMVCAppAsFastAsICan.Controllers
         public IActionResult Index(TodoModel newTodo)
         {
             var user = getLoggedInUserByEmail();
-            if (user.Todos == null)
+
+            if (ModelState.IsValid)
             {
-                user.Todos = new List<TodoModel>();
+                newTodo.DateCreated = DateTime.UtcNow;
+
+                if (user.Todos == null)
+                {
+                    user.Todos = new List<TodoModel>();
+                }
+                user.Todos.Add(newTodo);
+                _db.UpsertRecord(user.Id, user); 
             }
-            user.Todos.Add(newTodo);
-            _db.UpsertRecord(user.Id, user);
 
             return View(user);
+        }
+
+        public IActionResult Edit(int todoIndex)
+        {
+            var user = getLoggedInUserByEmail();
+
+            var todo = user.Todos[todoIndex];
+
+            return View(todo);
+            
+        }
+        [Route("{todoIndex}")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int todoIndex, TodoModel todo)
+        {
+            var user = getLoggedInUserByEmail();
+
+            if (ModelState.IsValid)
+            {
+                todo.LastEdited = DateTime.UtcNow;
+
+                // TODO: Edit inputs validation
+                user.Todos[todoIndex] = todo;
+
+                _db.UpsertRecord(user.Id, user); 
+            }
+
+            return RedirectToAction(nameof(Index));
+            
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int todoIndex)
+        {
+            var user = getLoggedInUserByEmail();
+
+            user.Todos.RemoveAt(todoIndex);
+
+            _db.UpsertRecord(user.Id, user);
+
+            return RedirectToAction(nameof(Index));
+
         }
 
         public IActionResult Privacy()
