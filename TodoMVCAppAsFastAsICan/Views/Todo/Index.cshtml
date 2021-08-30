@@ -4,10 +4,10 @@
 }
 
 <div>
-    <h2>@User.Identity.Name</h2>
+    <h1>@User.Identity.Name</h1>
 </div>
 @await Html.PartialAsync("_CreateTodo.cshtml", new TodoModel())
-<table>
+<table class="todo-table">
     <thead>
         <tr>
             @{
