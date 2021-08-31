@@ -25,7 +25,7 @@ namespace TodoMVCAppAsFastAsICan.Data
         /// <param name="configuration"></param>
         public MongoDbAccessor(IConfiguration configuration)
         {
-            var client = new MongoClient();
+            MongoClient client = new MongoClient();
             string database = configuration.GetConnectionString("MongoDB");
             _db = client.GetDatabase(database);
         }
@@ -40,7 +40,7 @@ namespace TodoMVCAppAsFastAsICan.Data
             {
                 database = TodoDb;
             }
-            var client = new MongoClient();
+            MongoClient client = new MongoClient();
             _db = client.GetDatabase(database);
         }
 
@@ -49,30 +49,30 @@ namespace TodoMVCAppAsFastAsICan.Data
 
         public void InsertRecord<T>(T record, string table = UserCollection)
         {
-            var collection = _db.GetCollection<T>(table);
+            IMongoCollection<T> collection = _db.GetCollection<T>(table);
             collection.InsertOne(record);
         }
 
         public List<T> LoadRecords<T>(string table = UserCollection)
         {
-            var collection = _db.GetCollection<T>(table);
+            IMongoCollection<T> collection = _db.GetCollection<T>(table);
 
             return collection.Find(new BsonDocument()).ToList();
         }
 
         public T LoadRecordById<T>(Guid id, string table = UserCollection)
         {
-            var collection = _db.GetCollection<T>(table);
-            var filter = Builders<T>.Filter.Eq(ModelIdName, id); // Eq id for equals, ctrl+J to see other comparisons
+            IMongoCollection<T> collection = _db.GetCollection<T>(table);
+            FilterDefinition<T> filter = Builders<T>.Filter.Eq(ModelIdName, id); // Eq id for equals, ctrl+J to see other comparisons
 
             return collection.Find(filter).First();
         }
 
         public void UpsertRecord<T>(Guid id, T record, string table = UserCollection)
         {
-            var collection = _db.GetCollection<T>(table);
+            IMongoCollection<T> collection = _db.GetCollection<T>(table);
 
-            var result = collection.ReplaceOne(
+            ReplaceOneResult result = collection.ReplaceOne(
                 new BsonDocument("_id", new BsonBinaryData(id, GuidRepresentation.Standard)), // the BsonBinaryData with GuidRep is the not obsolete way
                 record,
                 new ReplaceOptions { IsUpsert = true });
@@ -80,8 +80,8 @@ namespace TodoMVCAppAsFastAsICan.Data
 
         public void DeleteRecord<T>(Guid id, string table = UserCollection)
         {
-            var collection = _db.GetCollection<T>(table);
-            var filter = Builders<T>.Filter.Eq(ModelIdName, id); // Eq id for equals, ctrl+J to see other comparisons
+            IMongoCollection<T> collection = _db.GetCollection<T>(table);
+            FilterDefinition<T> filter = Builders<T>.Filter.Eq(ModelIdName, id); // Eq id for equals, ctrl+J to see other comparisons
             collection.DeleteOne(filter);
         }
     }

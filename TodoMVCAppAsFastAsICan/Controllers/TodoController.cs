@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using TodoMVCAppAsFastAsICan.Data;
 using TodoMVCAppAsFastAsICan.Models;
 
@@ -26,7 +25,7 @@ namespace TodoMVCAppAsFastAsICan.Controllers
 
         public IActionResult Index()
         {
-            var user = getLoggedInUserByEmail();
+            UserModel user = getLoggedInUserByEmail();
             if (user.Todos == null)
             {
                 user.Todos = new List<TodoModel>();
@@ -37,7 +36,7 @@ namespace TodoMVCAppAsFastAsICan.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Index(TodoModel newTodo)
         {
-            var user = getLoggedInUserByEmail();
+            UserModel user = getLoggedInUserByEmail();
 
             if (ModelState.IsValid)
             {
@@ -49,7 +48,7 @@ namespace TodoMVCAppAsFastAsICan.Controllers
                     user.Todos = new List<TodoModel>();
                 }
                 user.Todos.Add(newTodo);
-                _db.UpsertRecord(user.Id, user); 
+                _db.UpsertRecord(user.Id, user);
             }
 
             return View(user);
@@ -57,11 +56,11 @@ namespace TodoMVCAppAsFastAsICan.Controllers
 
         public IActionResult Edit(int todoIndex)
         {
-            var user = getLoggedInUserByEmail();
+            UserModel user = getLoggedInUserByEmail();
 
-            var dbTodo = user.Todos[todoIndex];
+            TodoModel dbTodo = user.Todos[todoIndex];
 
-            var todo = new EditTodoModel
+            EditTodoModel todo = new EditTodoModel
             {
                 Index = todoIndex,
                 Message = dbTodo.Message,
@@ -70,36 +69,37 @@ namespace TodoMVCAppAsFastAsICan.Controllers
             };
 
             return View(todo);
-            
+
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(EditTodoModel todo)
         {
-            var user = getLoggedInUserByEmail();
+            UserModel user = getLoggedInUserByEmail();
 
             if (ModelState.IsValid)
             {
-                // TODO: Edit inputs validation
-                user.Todos[todo.Index] = new TodoModel { 
+                // todo: Edit inputs validation? It's kind of done by the viewmodel...
+                user.Todos[todo.Index] = new TodoModel
+                {
                     Message = todo.Message,
                     DateCreated = todo.DateCreated,
                     LastEdited = DateTime.UtcNow
                 };
 
-                _db.UpsertRecord(user.Id, user); 
+                _db.UpsertRecord(user.Id, user);
             }
 
             return RedirectToAction(nameof(Index));
-            
+
         }
 
-        // todo: maybe make this delete POST and have a get version that has a confirm delete view.
+        // todo: maybe make a Delete GET method that has a confirm delete view.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int todoIndex)
         {
-            var user = getLoggedInUserByEmail();
+            UserModel user = getLoggedInUserByEmail();
 
             user.Todos.RemoveAt(todoIndex);
 

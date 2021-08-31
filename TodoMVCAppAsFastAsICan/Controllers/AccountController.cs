@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using TodoMVCAppAsFastAsICan.Data;
 using TodoMVCAppAsFastAsICan.Models;
 using TodoMVCAppAsFastAsICan.Security;
@@ -42,7 +41,7 @@ namespace TodoMVCAppAsFastAsICan.Controllers
                 {
                     LogInUser(dbUser);
 
-                    var t = HttpContext.User.Identity.Name;
+                    string t = HttpContext.User.Identity.Name;
 
                     return RedirectToAction("Index", "Todo");
                 }
@@ -79,7 +78,7 @@ namespace TodoMVCAppAsFastAsICan.Controllers
                 return View(newUser);
             }
 
-            var allUsers = _db.LoadRecords<UserModel>();
+            List<UserModel> allUsers = _db.LoadRecords<UserModel>();
             if (allUsers.Any(x => x.EmailAddress == newUser.EmailAddress))
             {
                 ViewData["RegisterMessage"] = "That email address is taken";
@@ -102,8 +101,8 @@ namespace TodoMVCAppAsFastAsICan.Controllers
         [Authorize("Auth_Policy")]
         public IActionResult EditAccount()
         {
-            var user = GetLoggedInUserByEmail();
-            
+            UserModel user = GetLoggedInUserByEmail();
+
             return View(DbUserToEditView(user));
         }
         [Authorize("Auth_Policy")]
@@ -112,20 +111,19 @@ namespace TodoMVCAppAsFastAsICan.Controllers
         public IActionResult EditAccount(EditUserViewModel updatedUser)
         {
             // 1) Make sure email isn't taken
-            var allUsers = _db.LoadRecords<UserModel>();
-            var loggedInUser = GetLoggedInUserByEmail();
+            List<UserModel> allUsers = _db.LoadRecords<UserModel>();
+            UserModel loggedInUser = GetLoggedInUserByEmail();
 
-            if (IsValidEmailAddress(updatedUser.EmailAddress) == false || 
+            if (IsValidEmailAddress(updatedUser.EmailAddress) == false ||
                 allUsers.Any(x => x.EmailAddress == updatedUser.EmailAddress && updatedUser.EmailAddress != loggedInUser.EmailAddress))
             {
                 ViewData["EditMessage"] = "That email address is taken";
                 return View(DbUserToEditView(loggedInUser));
             }
-                    
+
             if (string.IsNullOrWhiteSpace(updatedUser.NewPassword) == false)
             {
                 // 2) Make sure old password is correct
-                // TODO - add regex to EditUserViewModel
                 PasswordHashModel passwordHash = new PasswordHashModel();
                 passwordHash.FromDbString(loggedInUser.PasswordHash);
 
@@ -143,13 +141,13 @@ namespace TodoMVCAppAsFastAsICan.Controllers
 
                     loggedInUser.EmailAddress = "";
                     loggedInUser.PasswordHash = "";
-                    return View(DbUserToEditView(loggedInUser));
-                } 
+                    return RedirectToAction("Index", "Todo");
+                }
                 else
                 {
                     return View(DbUserToEditView(loggedInUser));
                 }
-            } 
+            }
             else
             {
                 // No password change
@@ -160,7 +158,7 @@ namespace TodoMVCAppAsFastAsICan.Controllers
 
                 LogInUser(loggedInUser);
 
-                return View(DbUserToEditView(loggedInUser));
+                return RedirectToAction("Index", "Todo");
             }
         }
 

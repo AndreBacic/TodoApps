@@ -19,7 +19,8 @@ namespace TodoMVCAppAsFastAsICan.Models
         public string OldPassword { get; set; }
         [DataType(DataType.Password)]
         [Display(Name = "New Password")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$", ErrorMessage = "Invalid Password")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$",
+            ErrorMessage = "Invalid Password. Password must have a lower and uppercase letter, a number, a special character and be 8 or more characters long.")]
         public string NewPassword { get; set; }
     }
 }

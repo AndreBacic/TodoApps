@@ -1,5 +1,3 @@
-using System;
-
 namespace TodoMVCAppAsFastAsICan.Models
 {
     public class ErrorViewModel

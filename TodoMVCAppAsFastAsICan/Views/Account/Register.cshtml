@@ -9,7 +9,7 @@
 @{string message = ViewData["RegisterMessage"].ToString();}
 @if (String.IsNullOrWhiteSpace(message) == false)
 {
-    <p>@ViewData["RegisterMessage"]</p>
+    <h3 class="warning-text" style="text-align: center;">@ViewData["RegisterMessage"]</h3>
 }
 <hr />
 <div class="row">

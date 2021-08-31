@@ -73,7 +73,7 @@ nav a:hover {
 
 .grid-container {
     width: 100%;
-    height: 100%;
+    min-height: calc(100% - 60px);
     display: grid;
     align-items: center;
     justify-content: center;
@@ -131,10 +131,12 @@ nav a:hover {
     text-decoration: none;
     background-color: black;
     margin: 0.5rem auto;
-    padding: 0.5rem 1rem;
+    padding: 0.375rem 1rem 0.5rem;
     border: 1px solid black;
     border-radius: 1rem;
     font-size: 1.25rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 500;
 }
 .todo-button:hover {
     background-color: yellow;
@@ -152,7 +154,7 @@ nav a:hover {
     background-color: hsl(0, 100%, 80%);
 }
 .warning-text {
-    color: red;
+    color: hsl(0, 100%, 45%);
     background-color: hsl(0, 100%, 80%);
 }
 
