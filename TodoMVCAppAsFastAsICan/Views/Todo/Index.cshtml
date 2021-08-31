@@ -4,33 +4,38 @@
 }
 
 <div>
-    <h1>@User.Identity.Name</h1>
+    <h1>TODOs of @User.Identity.Name</h1>
 </div>
 @await Html.PartialAsync("_CreateTodo.cshtml", new TodoModel())
-<table class="todo-table">
-    <thead>
-        <tr>
-            @{
-                var _todo = new EditTodoModel();
-            }
-            <td></td>
-            <td>@Html.DisplayNameFor(_ => _todo.Message)</td>
-            <td>@Html.DisplayNameFor(_ => _todo.DateCreated)</td>
-            <td>@Html.DisplayNameFor(_ => _todo.LastEdited)</td>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var todo in Model.Todos)
-        {
+<div class="todo-table-container">
+    <table class="todo-table">
+        <thead>
             <tr>
-                <td>TODO: </td>
-                <td>@todo.Message</td>
-                <td>@Html.DisplayFor(_ => todo.DateCreated)</td>
-                <td>@Html.DisplayFor(_ => todo.LastEdited)</td>
-                <td><a asp-controller="Todo" asp-action="Edit" asp-route-todoIndex="@Model.Todos.IndexOf(todo)">Edit</a></td>
-                <td><form asp-controller="Todo" asp-action="Delete" asp-route-todoIndex="@Model.Todos.IndexOf(todo)" method="post">
-                    <input type="submit" value="Delete" /></form></td>
+                @{
+                    var _todo = new EditTodoModel();
+                }
+                <td></td>
+                <td>@Html.DisplayNameFor(_ => _todo.Message)</td>
+                <td>@Html.DisplayNameFor(_ => _todo.DateCreated)</td>
+                <td>@Html.DisplayNameFor(_ => _todo.LastEdited)</td>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var todo in Model.Todos)
+            {
+                <tr>
+                    <td>TODO: </td>
+                    <td>@todo.Message</td>
+                    <td>@Html.DisplayFor(_ => todo.DateCreated)</td>
+                    <td>@Html.DisplayFor(_ => todo.LastEdited)</td>
+                    <td><a asp-controller="Todo" asp-action="Edit" asp-route-todoIndex="@Model.Todos.IndexOf(todo)">Edit</a></td>
+                    <td>
+                        <form asp-controller="Todo" asp-action="Delete" asp-route-todoIndex="@Model.Todos.IndexOf(todo)" method="post">
+                            <input type="submit" value="Delete" />
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

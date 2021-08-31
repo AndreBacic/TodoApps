@@ -3,14 +3,14 @@
 <h2>Create New Todo</h2>
 <div class="col-md-4">
     <form asp-action="Index" asp-controller="Todo" method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div asp-validation-summary="ModelOnly" class="warning-text"></div>
         <div class="form-group">
-            <label asp-for="Message" class="control-label"></label>
-            <input asp-for="Message" class="form-control" value="" placeholder="Write a todo"/>
-            <span asp-validation-for="Message" class="text-danger"></span>
+            <label asp-for="Message" class=""></label>
+            <input asp-for="Message" class="" value="" placeholder="Write a todo"/>
+            <span asp-validation-for="Message" class="warning-text"></span>
         </div>
         <div class="form-group">
-            <input type="submit" value="Create" class="btn btn-primary" />
+            <input type="submit" value="Create" class="submit-btn" />
         </div>
     </form>
 </div>
