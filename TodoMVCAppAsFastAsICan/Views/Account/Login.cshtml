@@ -5,9 +5,9 @@
 
 <h1>Login</h1>
 <form asp-action="Login" asp-controller="Account" method="post">
-    <input type="email" asp-for="EmailAddress" placeholder="Email Address" />
-    <input type="password" asp-for="Password" placeholder="Password" />
-    <input type="submit" value="Log in" />
+    <input type="email" asp-for="EmailAddress" placeholder="Email Address" class="todo-text-input" contenteditable="true" />
+    <input type="password" asp-for="Password" placeholder="Password" class="todo-text-input" contenteditable="true" />
+    <input type="submit" value="Log in" class="todo-button" />
 </form>
-<div>No account? <a asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a></div>
+<div>No account? <a asp-area="" asp-controller="Account" asp-action="Register" class="todo-button">Sign Up</a></div>
 

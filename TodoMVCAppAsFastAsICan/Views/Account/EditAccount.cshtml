@@ -12,37 +12,37 @@
         <div asp-validation-summary="ModelOnly" class="warning-text"></div>
         <div class="form-group">
             <label asp-for="FirstName" class=""></label>
-            <input asp-for="FirstName" class="" value="@Model.FirstName" />
+            <input asp-for="FirstName" class="todo-text-input" contenteditable="true" value="@Model.FirstName" />
             <span asp-validation-for="FirstName" class="warning-text"></span>
         </div>
         <div class="form-group">
             <label asp-for="LastName" class=""></label>
-            <input asp-for="LastName" class="" value="@Model.LastName" />
+            <input asp-for="LastName" class="todo-text-input" contenteditable="true" value="@Model.LastName" />
             <span asp-validation-for="LastName" class="warning-text"></span>
         </div>
         <div class="form-group">
             <label asp-for="EmailAddress" class=""></label>
-            <input asp-for="EmailAddress" type="email" class="" value="@Model.EmailAddress" />
+            <input asp-for="EmailAddress" type="email" class="todo-text-input" contenteditable="true" value="@Model.EmailAddress" />
             <span asp-validation-for="EmailAddress" class="warning-text"></span>
         </div>
         <div class="form-group">
             <p>(Only use the fields below if you want to change your password)</p>
             <label asp-for="OldPassword" class=""></label>
-            <input asp-for="OldPassword" type="password" class="" />
+            <input asp-for="OldPassword" type="password" class="todo-text-input" contenteditable="true" />
             <span asp-validation-for="OldPassword" class="warning-text"></span>
         </div>
         <div class="form-group">
             <label asp-for="NewPassword" class=""></label>
-            <input asp-for="NewPassword" type="password" class="" />
+            <input asp-for="NewPassword" type="password" class="todo-text-input" contenteditable="true" />
             <span asp-validation-for="NewPassword" class="warning-text"></span>
         </div>
         <div class="form-group">
-            <input type="submit" value="Save" class="" />
+            <input type="submit" value="Save" class="todo-button" />
         </div>
     </form>
 </div>
 
 <div>
-    <a asp-controller="Todo" asp-action="Index">Back to Home</a>
+    <a asp-controller="Todo" asp-action="Index" class="todo-button">Back to Home</a>
 </div>
 

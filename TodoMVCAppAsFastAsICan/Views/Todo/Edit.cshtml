@@ -10,19 +10,19 @@
             <input type="hidden" asp-for="DateCreated" />
             <div class="form-group">
                 <label asp-for="Message" class="">Message:</label>
-                <input asp-for="Message" class="" value="@Model.Message" />
+                <input asp-for="Message" class="todo-text-input" contenteditable="true" value="@Model.Message" />
                 <span asp-validation-for="Message" class="warning-text"></span>
             </div>
             <p>@Html.DisplayNameFor(m => m.DateCreated): @Html.DisplayFor(m => m.DateCreated)</p>
             <p>@Html.DisplayNameFor(m => m.LastEdited): @Html.DisplayFor(m => m.LastEdited)</p>
             <div class="form-group">
-                <input type="submit" value="Save" class="submit-btn" />
+                <input type="submit" value="Save" class="todo-button" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to Home</a>
+    <a asp-action="Index" class="todo-button">Back to Home</a>
 </div>
 

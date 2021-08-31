@@ -18,29 +18,29 @@
             <div asp-validation-summary="ModelOnly" class="warning-text"></div>
             <div class="form-group">
                 <label asp-for="FirstName" class=""></label>
-                <input asp-for="FirstName" class="" />
+                <input asp-for="FirstName" class="todo-text-input" contenteditable="true" />
                 <span asp-validation-for="FirstName" class="warning-text"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LastName" class=""></label>
-                <input asp-for="LastName" class="" />
+                <input asp-for="LastName" class="todo-text-input" contenteditable="true" />
                 <span asp-validation-for="LastName" class="warning-text"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EmailAddress" class=""></label>
-                <input asp-for="EmailAddress" type="email" class="" />
+                <input asp-for="EmailAddress" type="email" class="todo-text-input" contenteditable="true" />
                 <span asp-validation-for="EmailAddress" class="warning-text"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password" class=""></label>
-                <input asp-for="Password" type="password" class="" />
+                <input asp-for="Password" type="password" class="todo-text-input" contenteditable="true" />
                 <span asp-validation-for="Password" class="warning-text"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="submit-btn" />
+                <input type="submit" value="Create" class="todo-button" />
             </div>
         </form>
     </div>
 </div>
-<div>Already registered? <a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></div>
+<div>Already registered? <a asp-area="" asp-controller="Account" asp-action="Login" class="todo-button">Log in</a></div>
 

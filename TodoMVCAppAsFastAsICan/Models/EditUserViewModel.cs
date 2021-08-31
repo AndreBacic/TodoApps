@@ -14,11 +14,11 @@ namespace TodoMVCAppAsFastAsICan.Models
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         [Display(Name = "Email Address")]
         public string EmailAddress { get; set; }
-        [Required]
         [DataType(DataType.Password)]
+        [Display(Name = "Old Password")]
         public string OldPassword { get; set; }
-        [Required]
         [DataType(DataType.Password)]
+        [Display(Name = "New Password")]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$", ErrorMessage = "Invalid Password")]
         public string NewPassword { get; set; }
     }
