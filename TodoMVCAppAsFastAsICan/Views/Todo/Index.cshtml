@@ -28,8 +28,8 @@
                 <tr>
                     <td class="hide-for-mobile">TODO: </td>
                     <td>@todo.Message</td>
-                    <td class="hide-for-mobile">@Html.DisplayFor(_ => todo.DateCreated)</td>
-                    <td class="hide-for-mobile">@Html.DisplayFor(_ => todo.LastEdited)</td>
+                    <td class="hide-for-mobile">@todo.DateCreated.ToLocalTime()</td>
+                    <td class="hide-for-mobile">@todo.LastEdited.ToLocalTime()</td>
                     <td><a asp-controller="Todo" asp-action="Edit" asp-route-todoIndex="@Model.Todos.IndexOf(todo)">Edit</a></td>
                     <td>
                         <form asp-controller="Todo" asp-action="Delete" asp-route-todoIndex="@Model.Todos.IndexOf(todo)" method="post">

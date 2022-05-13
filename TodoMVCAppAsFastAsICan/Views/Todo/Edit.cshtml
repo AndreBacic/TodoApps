@@ -7,14 +7,14 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="warning-text"></div>
             <input type="hidden" asp-for="Index" />
-            <input type="hidden" asp-for="DateCreated" />
+            <input type="hidden" asp-for="DateCreated" value="@Model.DateCreated.ToLocalTime()" />
             <div class="form-group">
                 <label asp-for="Message" class="">Message:</label>
                 <input asp-for="Message" class="todo-text-input" contenteditable="true" value="@Model.Message" />
                 <span asp-validation-for="Message" class="warning-text"></span>
             </div>
-            <p>@Html.DisplayNameFor(m => m.DateCreated): @Html.DisplayFor(m => m.DateCreated)</p>
-            <p>@Html.DisplayNameFor(m => m.LastEdited): @Html.DisplayFor(m => m.LastEdited)</p>
+            <p>@Html.DisplayNameFor(m => m.DateCreated): @Model.DateCreated.ToLocalTime()</p>
+            <p>@Html.DisplayNameFor(m => m.LastEdited): @Model.LastEdited.ToLocalTime()</p>
             <div class="form-group">
                 <input type="submit" value="Save" class="todo-button" />
             </div>
